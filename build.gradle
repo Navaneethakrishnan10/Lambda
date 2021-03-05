@@ -1,0 +1,51 @@
+
+
+plugins {
+    id 'java'
+    id 'application'
+    id "com.github.eirnym.js2p" version "1.0"
+}
+group 'navaneeAWSproject'
+version '1.0-SNAPSHOT'
+apply plugin: 'java'
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+}
+dependencies
+        {
+            compile group: 'com.amazonaws', name: 'aws-java-sdk-secretsmanager', version: '1.11.946'
+            compile group: 'com.amazonaws', name: 'aws-java-sdk-dynamodb', version: '1.11.961'
+            compile group: 'com.amazonaws', name: 'aws-java-sdk-core', version: '1.11.961'
+            compile group: 'org.apache.maven.plugins', name: 'maven-compiler-plugin', version: '3.8.1'
+            compile group: 'com.fasterxml.jackson.core', name: 'jackson-core', version: '2.12.1'
+            compile group: 'com.amazonaws', name: 'aws-lambda-java-core', version: '1.2.1'
+            compile group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: '2.12.1'
+            compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.12.1'
+            compile group: 'com.amazonaws', name: 'aws-lambda-java-events', version: '3.7.0'
+            compile group: 'org.springframework.boot', name: 'spring-boot-starter-data-jpa', version: '2.4.2'
+            compile group: 'org.springframework.boot', name: 'spring-boot-starter-web', version: '2.4.2'
+            compile group: 'org.apache.maven.plugins', name: 'maven-shade-plugin', version: '3.2.4'
+            testCompile group: 'junit', name: 'junit', version: '4.12'
+            compile 'javax.validation:validation-api:1.1.0.CR2'
+            compile 'com.fasterxml.jackson.core:jackson-databind:2.9.7'
+            compile 'joda-time:joda-time:2.2'
+        }
+jsonSchema2Pojo {
+    includeJsr303Annotations = true
+    source = files("src/main/resources/json")
+    targetDirectory = file("$buildDir/generated-pojoClass/")
+    targetPackage = 'gradle'
+}
+mainClassName="krishclass"
+jar{
+    manifest{
+        attributes "Main-Class":"$mainClassName"
+    }
+    from configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+}
+
